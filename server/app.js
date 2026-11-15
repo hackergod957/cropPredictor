@@ -1,9 +1,9 @@
 import cors from 'cors';
+import { recommend, PredictionError } from './recommend.js';
 import express from 'express';
 import { fileURLToPath } from 'node:url';
 
-export function createApp({ mlUrl, timeoutMs = 20000 }) {
-  if (!mlUrl) throw new Error('ML_URL must be configured');
+export function createApp({ mlUrl, timeoutMs = 20000 } = {}) {
   const app = express();
   app.use(cors());
   app.use(express.json());
@@ -13,6 +13,7 @@ export function createApp({ mlUrl, timeoutMs = 20000 }) {
   app.post('/api/recommend', async (req, res) => {
     try {
       const { lat, lon } = req.body ?? {};
+      if (!mlUrl) return res.json(await recommend(lat, lon));
       const response = await fetch(`${mlUrl.replace(/\/$/, '')}/predict`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -22,6 +23,7 @@ export function createApp({ mlUrl, timeoutMs = 20000 }) {
       const data = await response.json();
       return res.status(response.status).json(data);
     } catch (error) {
+      if (error instanceof PredictionError) return res.status(error.status).json({ detail: error.message });
       console.error(`Prediction request failed (${error.name}): ${error.message}`);
       return res.status(503).json({ detail: 'Prediction service unavailable' });
     }

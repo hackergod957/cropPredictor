@@ -4,6 +4,8 @@ import { createApp } from './app.js';
 
 dotenv.config({ path: fileURLToPath(new URL('.env', import.meta.url)) });
 const port = process.env.PORT || 3000;
-createApp({ mlUrl: process.env.ML_URL }).listen(port, () => {
-  console.log(`Express listening on http://localhost:${port}`);
-});
+const app = createApp({ mlUrl: process.env.VERCEL ? undefined : process.env.ML_URL });
+export default app;
+if (!process.env.VERCEL) {
+  app.listen(port, () => console.log(`Express listening on http://localhost:${port}`));
+}

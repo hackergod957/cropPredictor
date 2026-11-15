@@ -134,3 +134,7 @@ websocket-client==1.9.2
 wheel==0.48.0
 widgetsnbextension==4.0.16
 wrapt==2.5.2
+
+fastapi==0.163.1
+pydantic==2.14.3
+uvicorn==0.54.0

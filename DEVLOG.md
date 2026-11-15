@@ -20,3 +20,25 @@ two-coordinate responses safely yield null. Elevation is not a model feature.
 
 Added POST /api/recommend in Express with ML_URL configuration, a 20-second
 timeout, upstream JSON/status passthrough, and 503 on transport failure.
+
+## 2026-11-15: Submission audit and Vercel preparation
+
+Verified the GitHub repository opens without cookies or credentials. Expanded
+the README with a project description, fresh setup instructions, optional
+Python training instructions, and limitations. Added missing FastAPI, Pydantic,
+and Uvicorn dependencies to the Python dependency file.
+
+Exported the existing trained dense model and scaler for Node inference.
+Across all 2,200 local dataset rows, the top crop matched Keras; the largest
+absolute probability difference was 0.000001633. Six Keras reference cases
+are saved for automated tests. The original Python API remains available.
+
+The Vercel build includes static frontend assets, Leaflet, a Node prediction
+function, and exported model weights. No separate Python hosting is required.
+A fresh source copy passed npm ci, all 11 tests, and the frontend build.
+The training CSV is not shipped, so retraining still needs that external file.
+
+A temporary anonymous Vercel deployment reached READY. Requests from this
+environment received a Vercel edge 403, so public access and remote predictions
+remain unverified. The deployment must be claimed in the owner's Vercel account
+and checked in a private window before it qualifies as a lasting public demo.

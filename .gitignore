@@ -223,3 +223,7 @@ __marimo__/
 .streamlit/secrets.toml
 # Node dependencies
 node_modules/
+
+# Generated deployment assets and local Vercel state
+server/public/vendor/
+.vercel/
