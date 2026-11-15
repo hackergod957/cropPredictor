@@ -1,3 +1,5 @@
+import { getCropGuide } from './crop-guides.js';
+
 const form = document.querySelector('#location-form');
 const latInput = document.querySelector('#lat');
 const lonInput = document.querySelector('#lon');
@@ -10,6 +12,57 @@ let map;
 let marker;
 let activeRequest;
 let revision = 0;
+let resultContext;
+const guidePanel = document.querySelector('#farming-guide');
+let selectedCropButton;
+
+function closeGuide(restoreFocus = false) {
+  guidePanel.hidden = true;
+  selectedCropButton?.setAttribute('aria-expanded', 'false');
+  if (restoreFocus && selectedCropButton?.isConnected) selectedCropButton.focus();
+  selectedCropButton = undefined;
+}
+
+document.querySelector('#close-guide').addEventListener('click', () => closeGuide(true));
+guidePanel.addEventListener('keydown', event => {
+  if (event.key === 'Escape') closeGuide(true);
+});
+
+function openGuide(crop, button) {
+  const guide = getCropGuide(crop);
+  if (!guide) {
+    message('A farming guide is not available for this crop yet.', true);
+    return;
+  }
+  closeGuide();
+  selectedCropButton = button;
+  button.setAttribute('aria-expanded', 'true');
+  const title = document.querySelector('#guide-title');
+  title.textContent = `How to grow ${guide.name.toLowerCase()}`;
+  document.querySelector('#guide-system').textContent = guide.system;
+  const { data, lat, lon } = resultContext;
+  document.querySelector('#guide-location').textContent = `Your selected spot: ${lat.toFixed(4)}°, ${lon.toFixed(4)}° · Annual temperature: ${data.temperature} °C · Annual relative humidity: ${data.humidity}% · Soil pH: ${data.ph}${data.ph_is_default ? ' (default estimate)' : ''}. These readings are context, not a season-specific forecast.`;
+  document.querySelector('#guide-steps').replaceChildren(...guide.steps.map((step, index) => {
+    const item = document.createElement('li');
+    const number = document.createElement('span');
+    number.className = 'guide-step-number';
+    number.textContent = String(index + 1).padStart(2, '0');
+    const content = document.createElement('div');
+    const heading = document.createElement('h3');
+    heading.textContent = step.title;
+    const text = document.createElement('p');
+    text.textContent = step.text;
+    content.append(heading, text);
+    item.append(number, content);
+    return item;
+  }));
+  const source = document.querySelector('#guide-source');
+  source.href = guide.source.url;
+  source.textContent = `${guide.source.title} ↗`;
+  guidePanel.hidden = false;
+  guidePanel.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
+  title.focus({ preventScroll: true });
+}
 
 function message(text, error = false) {
   status.textContent = text;
@@ -17,6 +70,8 @@ function message(text, error = false) {
 }
 
 function resetResults() {
+  closeGuide();
+  resultContext = undefined;
   revision += 1;
   activeRequest?.abort();
   submit.disabled = false;
@@ -112,17 +167,24 @@ function render(data, lat, lon) {
     condition('Rainfall · monthly estimate', data.rainfall, 'mm'),
     condition('Soil pH', data.ph, ''),
   );
+  resultContext = { data, lat, lon };
   const list = document.querySelector('#crop-list');
   list.replaceChildren();
   data.crops.slice(0, 5).forEach((crop, index) => {
     const row = document.createElement('li');
-    row.className = 'crop';
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'crop';
+    button.setAttribute('aria-controls', 'farming-guide');
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-label', `View farming guide for ${crop.crop}`);
+    button.addEventListener('click', () => openGuide(crop.crop, button));
     const rank = document.createElement('span');
     rank.className = 'crop-rank';
     rank.textContent = String(index + 1).padStart(2, '0');
     const name = document.createElement('span');
     name.className = 'crop-name';
-    name.textContent = crop.crop.replaceAll('_', ' ');
+    name.textContent = getCropGuide(crop.crop)?.name ?? crop.crop.replaceAll('_', ' ');
     const score = Math.min(1, Math.max(0, crop.score)) * 100;
     const track = document.createElement('span');
     track.className = 'score-track';
@@ -133,7 +195,8 @@ function render(data, lat, lon) {
     const value = document.createElement('span');
     value.className = 'crop-score';
     value.textContent = `${score.toFixed(1)}%`;
-    row.append(rank, name, track, value);
+    button.append(rank, name, track, value);
+    row.append(button);
     list.append(row);
   });
   document.querySelector('#soil-note').hidden = !data.ph_is_default;
@@ -147,6 +210,8 @@ form.addEventListener('submit', async (event) => {
   const point = coordinates();
   if (!point) return;
   const [lat, lon] = point;
+  closeGuide();
+  resultContext = undefined;
   activeRequest?.abort();
   const controller = new AbortController();
   activeRequest = controller;

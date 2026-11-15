@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="/style.css">
   <script defer src="/vendor/leaflet/leaflet.js"></script>
-  <script defer src="/app.js"></script>
+  <script type="module" src="/app.js"></script>
 </head>
 <body>
   <header class="topbar"><a class="brand" href="/" aria-label="Sprout home"><span class="brand-icon">✳</span> sprout<span class="brand-dot">.</span></a><span class="project-label">A little science for your next harvest</span><a class="about-link" href="#how-it-works">How it works <span aria-hidden="true">↗</span></a></header>
@@ -24,9 +24,15 @@
       </div>
       <div class="results-panel"><div class="panel-heading"><span class="step">02</span><div><h2>Your growing possibilities</h2><p id="result-subtitle">A shortlist, inspired by local conditions.</p></div></div>
         <div id="empty-state" class="empty-state"><span class="seed-icon" aria-hidden="true">✳</span><h3>A little ground. A lot of possibility.</h3><p>Choose your location and we’ll bring back<br>five crops to get you thinking.</p><span class="empty-note">CLIMATE + SOIL + A LITTLE MACHINE LEARNING</span></div>
-        <div id="results" hidden><div id="conditions" class="conditions"></div><div class="list-heading"><span>CROP</span><span>MODEL SCORE</span></div><ol id="crop-list"></ol><p id="soil-note" class="soil-note" hidden>Soil pH was unavailable for this location, so a default value was used.</p></div>
+        <div id="results" hidden><div id="conditions" class="conditions"></div><div class="list-heading"><span>CROP</span><span>MODEL SCORE</span></div><p class="guide-hint">Select a crop to see how to grow it ↗</p><ol id="crop-list"></ol><p id="soil-note" class="soil-note" hidden>Soil pH was unavailable for this location, so a default value was used.</p></div>
         <div class="caution"><span aria-hidden="true">ⓘ</span><p>A starting point, not a planting promise. Annual climate averages can differ from growing-season conditions. Check local advice before planting.</p></div>
       </div>
+    </section>
+    <section id="farming-guide" class="farming-guide" aria-labelledby="guide-title" hidden>
+      <div class="guide-header"><div><p class="eyebrow">03 / FROM POSSIBILITY TO PLANTING</p><h2 id="guide-title" tabindex="-1"></h2><p id="guide-system"></p></div><button id="close-guide" type="button" aria-label="Close farming guide">Close ×</button></div>
+      <p id="guide-location" class="guide-location"></p>
+      <ol id="guide-steps" class="guide-steps"></ol>
+      <div class="guide-footer"><p>General crop guide, not a location-specific planting plan. Confirm local seasons, varieties, spacing and inputs with an agricultural extension officer. Annual climate averages cannot set a watering schedule.</p><a id="guide-source" target="_blank" rel="noopener noreferrer">Read the source ↗</a></div>
     </section>
     <section id="how-it-works" class="how"><p class="eyebrow">FROM A PIN TO A POSSIBILITY</p><div><article><span>01 / LOCATE</span><h3>Start with a place.</h3><p>A map pin gives us the coordinates of the patch you’re curious about.</p></article><article><span>02 / UNDERSTAND</span><h3>Meet the conditions.</h3><p>NASA POWER climate data and SoilGrids soil pH help describe the location.</p></article><article><span>03 / EXPLORE</span><h3>Find a starting point.</h3><p>A trained model ranks crops. Its scores are comparisons, not guaranteed yields.</p></article></div></section>
   </main><footer><a class="brand" href="/">sprout.</a><span>Built with curiosity. Made for growing.</span><span>A Hack Club project 🌱</span></footer>

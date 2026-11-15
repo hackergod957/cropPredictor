@@ -36,6 +36,19 @@ Map tiles and optional web fonts require internet access. Browser location needs
 permission and either localhost or HTTPS. Manual coordinates still work without
 location permission.
 
+## Farming guides
+
+After getting recommendations, select any crop to open its growing guide.
+All 22 model crops have a five-step guide covering site and season planning,
+planting, water, crop care and harvest, with an agricultural extension or
+research source link. Guides show the selected location's climate and soil
+readings as context, and mark fallback soil pH.
+
+These are built-in educational summaries, not LLM-generated or personalized
+agronomic plans. No API key or paid AI service is needed. Confirm local seasons,
+varieties, spacing and input rates before planting. Changing the location clears
+the guide so old results are not shown for a new spot.
+
 ## Deploy to Vercel
 
 Import this repository into Vercel and set **Root Directory to `server`**.
