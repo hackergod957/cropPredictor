@@ -1,4 +1,5 @@
 import requests
+import requests_cache
 
 URL = "https://rest.isric.org/soilgrids/v2.0/properties/query"
 DEFAULT_PH = 6.5
@@ -15,7 +16,7 @@ def fetch_soil(lat: float, lon: float) -> dict:
     }
 
     try:
-        req = requests.get(URL, params=params, timeout=30)
+        req = requests_cache.CachedSession("data/raw/cache", expire_after=86400).get(URL, params=params, timeout=30)
         req.raise_for_status()
 
         layer = req.json()["properties"]["layers"][0]

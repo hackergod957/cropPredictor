@@ -16,6 +16,8 @@ def load_and_prepare(csv_path):
     df = pd.read_csv(csv_path)
     df = df[FEATURES + ["label"]]
 
+    print(df["rainfall"].describe())
+
     X = df[FEATURES]
     le = LabelEncoder()
     y = le.fit_transform(df["label"])
