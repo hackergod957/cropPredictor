@@ -1,40 +1,215 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f36b50">
-  <title>Sprout — Find your next crop</title>
-  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
-  <link rel="stylesheet" href="/style.css">
-  <script defer src="/vendor/leaflet/leaflet.js"></script>
-  <script type="module" src="/app.js"></script>
-</head>
-<body>
-  <header class="topbar"><a class="brand" href="/" aria-label="Sprout home"><span class="brand-icon">✳</span> sprout<span class="brand-dot">.</span></a><span class="project-label">A little science for your next harvest</span><a class="about-link" href="#how-it-works">How it works <span aria-hidden="true">↗</span></a></header>
-  <main>
-    <section class="intro"><div><p class="eyebrow"><span></span> ROOTED IN YOUR LOCATION</p><h1>Good things start<br>with the <em>right crop.</em></h1><p class="intro-copy">Pick a spot. Explore crops that fit its climate and soil.<br>A small starting point for something you can grow.</p></div><div class="garden" aria-hidden="true"><span class="sun"></span><svg viewBox="0 0 300 220"><path d="M20 204 Q150 159 280 204" fill="none" stroke="#344c3a" stroke-width="3"/><path d="M151 189V73M92 194v-60M212 194v-77" stroke="#344c3a" stroke-width="5" fill="none"/><path d="M150 137C92 143 99 92 108 86c37 1 48 26 42 51M154 108c-6-47 30-60 53-54 3 35-21 58-53 54M91 165c-39 3-49-22-44-43 29-2 47 14 44 43M213 159c-1-34 24-48 47-41 1 29-19 46-47 41" fill="#809b72" stroke="#344c3a" stroke-width="3"/></svg><span class="garden-label">a little potential, everywhere</span></div></section>
-    <section class="workspace" aria-label="Crop explorer">
-      <div class="location-panel"><div class="panel-heading"><span class="step">01</span><div><h2>Find your patch</h2><p>Tap the map or enter coordinates.</p></div></div>
-        <div class="map-wrap"><div id="map" aria-label="Location map"></div><span class="map-hint">Click anywhere to drop a pin</span></div>
-        <form id="location-form"><div class="coordinates"><label>Latitude<input id="lat" name="lat" type="number" min="-90" max="90" step="any" required value="27.60"></label><label>Longitude<input id="lon" name="lon" type="number" min="-180" max="180" step="any" required value="84.35"></label></div>
-          <div class="location-tools"><button type="button" id="locate">◎ Use my location</button><button type="button" id="chitwan">Try Chitwan, Nepal ↗</button></div>
-          <button class="primary" id="submit" type="submit"><span>Find my crops</span><span aria-hidden="true">↗</span></button>
-        </form><p id="status" class="status" role="status" aria-live="polite">Ready when you are. Let’s see what could grow here.</p>
-      </div>
-      <div class="results-panel"><div class="panel-heading"><span class="step">02</span><div><h2>Your growing possibilities</h2><p id="result-subtitle">A shortlist, inspired by local conditions.</p></div></div>
-        <div id="empty-state" class="empty-state"><span class="seed-icon" aria-hidden="true">✳</span><h3>A little ground. A lot of possibility.</h3><p>Choose your location and we’ll bring back<br>five crops to get you thinking.</p><span class="empty-note">CLIMATE + SOIL + A LITTLE MACHINE LEARNING</span></div>
-        <div id="results" hidden><div id="conditions" class="conditions"></div><div class="list-heading"><span>CROP</span><span>MODEL SCORE</span></div><p class="guide-hint">Select a crop to see how to grow it ↗</p><ol id="crop-list"></ol><p id="soil-note" class="soil-note" hidden>Soil pH was unavailable for this location, so a default value was used.</p></div>
-        <div class="caution"><span aria-hidden="true">ⓘ</span><p>A starting point, not a planting promise. Annual climate averages can differ from growing-season conditions. Check local advice before planting.</p></div>
-      </div>
-    </section>
-    <section id="farming-guide" class="farming-guide" aria-labelledby="guide-title" hidden>
-      <div class="guide-header"><div><p class="eyebrow">03 / FROM POSSIBILITY TO PLANTING</p><h2 id="guide-title" tabindex="-1"></h2><p id="guide-system"></p></div><button id="close-guide" type="button" aria-label="Close farming guide">Close ×</button></div>
-      <p id="guide-location" class="guide-location"></p>
-      <ol id="guide-steps" class="guide-steps"></ol>
-      <div class="guide-footer"><p>General crop guide, not a location-specific planting plan. Confirm local seasons, varieties, spacing and inputs with an agricultural extension officer. Annual climate averages cannot set a watering schedule.</p><a id="guide-source" target="_blank" rel="noopener noreferrer">Read the source ↗</a></div>
-    </section>
-    <section id="how-it-works" class="how"><p class="eyebrow">FROM A PIN TO A POSSIBILITY</p><div><article><span>01 / LOCATE</span><h3>Start with a place.</h3><p>A map pin gives us the coordinates of the patch you’re curious about.</p></article><article><span>02 / UNDERSTAND</span><h3>Meet the conditions.</h3><p>NASA POWER climate data and SoilGrids soil pH help describe the location.</p></article><article><span>03 / EXPLORE</span><h3>Find a starting point.</h3><p>A trained model ranks crops. Its scores are comparisons, not guaranteed yields.</p></article></div></section>
-  </main><footer><a class="brand" href="/">sprout.</a><span>Built with curiosity. Made for growing.</span><span>A Hack Club project 🌱</span></footer>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5f2e9" />
+    <meta
+      name="description"
+      content="Compare crops for a location using climate and soil data, then read a practical growing guide."
+    />
+    <title>Sprout — Crop planner</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/vendor/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="/style.css" />
+    <script defer src="/vendor/leaflet/leaflet.js"></script>
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#location-form">Skip to location</a>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Sprout home"
+        >sprout<span>.</span></a
+      >
+      <span class="project-label">A field guide for your next crop</span>
+      <nav aria-label="Main navigation">
+        <a href="#how-it-works">About the project</a>
+        <a
+          href="https://github.com/hackergod957/cropPredictor"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Source code ↗</a
+        >
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">THE CROP PLANNER</p>
+          <h1 id="page-title">What should you<br /><em>grow here?</em></h1>
+          <p class="intro-copy">
+            Start with a location. Compare five crop suggestions, check the
+            conditions, and read how to grow the one you choose.
+          </p>
+        </div>
+        <aside class="field-note">
+          <span class="note-label">BEFORE YOU PLANT</span>
+          <p>The right crop depends on more than the weather.</p>
+          <p>
+            Use this to narrow down your options. Your season, water supply and
+            local experience matter too.
+          </p>
+        </aside>
+      </section>
+
+      <section class="workspace" aria-label="Crop planner">
+        <div class="location-panel">
+          <div class="panel-heading">
+            <span class="step">01</span>
+            <div>
+              <h2>Choose a location</h2>
+              <p>Click the map, drag the pin, or enter coordinates.</p>
+            </div>
+          </div>
+          <div class="map-wrap">
+            <div id="map" aria-label="Location map"></div>
+            <span class="map-hint">Click to move the pin</span>
+          </div>
+          <form id="location-form">
+            <div class="coordinates">
+              <label for="lat"
+                >Latitude<input
+                  id="lat"
+                  name="lat"
+                  type="number"
+                  min="-90"
+                  max="90"
+                  step="any"
+                  required
+                  value="27.60"
+              /></label>
+              <label for="lon"
+                >Longitude<input
+                  id="lon"
+                  name="lon"
+                  type="number"
+                  min="-180"
+                  max="180"
+                  step="any"
+                  required
+                  value="84.35"
+              /></label>
+            </div>
+            <div class="location-tools">
+              <button type="button" id="locate">Use my location</button>
+              <button type="button" id="chitwan">
+                Example: Chitwan, Nepal
+              </button>
+            </div>
+            <button class="primary" id="submit" type="submit">
+              <span>Compare crops</span><span aria-hidden="true">→</span>
+            </button>
+          </form>
+          <p id="status" class="status" role="status" aria-live="polite">
+            Chitwan is selected. Move the pin to check somewhere else.
+          </p>
+        </div>
+
+        <div class="results-panel" aria-busy="false">
+          <div class="panel-heading">
+            <span class="step">02</span>
+            <div>
+              <h2>Crop suggestions</h2>
+              <p id="result-subtitle">Based on climate and soil pH.</p>
+            </div>
+          </div>
+          <div id="empty-state" class="empty-state">
+            <span class="empty-mark" aria-hidden="true">↳</span>
+            <h3 id="empty-title">Your results will appear here.</h3>
+            <p id="empty-copy">
+              Choose a spot and select <strong>Compare crops</strong>.<br />Then
+              open a crop to read its growing guide.
+            </p>
+            <span class="empty-note">NO ACCOUNT OR API KEY NEEDED</span>
+          </div>
+          <div id="results" hidden>
+            <p class="section-label">THE CONDITIONS</p>
+            <div id="conditions" class="conditions"></div>
+            <div class="list-heading">
+              <span>RECOMMENDED CROPS</span><span>MODEL SCORE</span>
+            </div>
+            <ol id="crop-list"></ol>
+            <p class="guide-hint">
+              Select a crop for planting, watering and harvest notes.
+            </p>
+            <p id="soil-note" class="soil-note" hidden>
+              Soil data wasn't available. These results use a default pH of 6.5.
+            </p>
+          </div>
+          <div class="caution">
+            <p>
+              These scores compare crops; they aren't expected yields. Climate
+              figures are annual averages and may differ from your growing
+              season.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="farming-guide"
+        class="farming-guide"
+        aria-labelledby="guide-title"
+        hidden
+      >
+        <div class="guide-header">
+          <div>
+            <p class="eyebrow">03 / GROWING NOTES</p>
+            <h2 id="guide-title" tabindex="-1"></h2>
+            <p id="guide-system"></p>
+          </div>
+          <button
+            id="close-guide"
+            type="button"
+            aria-label="Close farming guide"
+          >
+            Close ×
+          </button>
+        </div>
+        <p id="guide-location" class="guide-location"></p>
+        <ol id="guide-steps" class="guide-steps"></ol>
+        <div class="guide-footer">
+          <p>
+            A general guide for this crop. Check planting dates, varieties,
+            spacing and input rates with your local agricultural extension
+            office. These notes aren't a tailored farm plan.
+          </p>
+          <a id="guide-source" target="_blank" rel="noopener noreferrer"
+            >Read the source ↗</a
+          >
+        </div>
+      </section>
+
+      <section id="how-it-works" class="about">
+        <div>
+          <p class="eyebrow">ABOUT SPROUT</p>
+          <h2>A small project,<br />with a useful question.</h2>
+        </div>
+        <div class="about-copy">
+          <p>
+            Sprout explores whether climate and soil data could help narrow down
+            crop choices. It combines NASA POWER climate data, SoilGrids soil pH
+            and a neural network trained on a crop recommendation dataset.
+          </p>
+          <p>
+            The model considers temperature, humidity, rainfall and pH. It
+            doesn't know your irrigation setup, nutrient levels or local crop
+            varieties. The growing guides are written summaries with source
+            links, not AI-generated advice.
+          </p>
+          <a
+            href="https://github.com/hackergod957/cropPredictor#readme"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Read the setup notes and limitations ↗</a
+          >
+        </div>
+      </section>
+    </main>
+    <footer>
+      <a class="brand" href="/">sprout<span>.</span></a
+      ><span>A Hack Club project</span><a href="#page-title">Back to top ↑</a>
+    </footer>
+  </body>
 </html>

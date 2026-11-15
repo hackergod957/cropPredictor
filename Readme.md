@@ -1,5 +1,7 @@
 # Sprout · Crop Predictor
 
+**[Try the live app](https://sprout-crop-predictor.vercel.app)**
+
 Sprout is a small crop recommendation app built for a Hack Club project.
 Choose a location on a map, enter coordinates, or use your browser's location
 button. The app uses NASA POWER climate data and SoilGrids soil pH to rank
@@ -32,7 +34,7 @@ data, standardizes the four model features, and evaluates the exported trained
 weights. SoilGrids failures use a default pH of 6.5, clearly marked in results.
 NASA failures return 502; locations without climate data return 422.
 
-Map tiles and optional web fonts require internet access. Browser location needs
+Map tiles require internet access. The frontend uses system fonts. Browser location needs
 permission and either localhost or HTTPS. Manual coordinates still work without
 location permission.
 
