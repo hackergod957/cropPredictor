@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f36b50">
+  <title>Sprout — Find your next crop</title>
+  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="/style.css">
+  <script defer src="/vendor/leaflet/leaflet.js"></script>
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="/" aria-label="Sprout home"><span class="brand-icon">✳</span> sprout<span class="brand-dot">.</span></a><span class="project-label">A little science for your next harvest</span><a class="about-link" href="#how-it-works">How it works <span aria-hidden="true">↗</span></a></header>
+  <main>
+    <section class="intro"><div><p class="eyebrow"><span></span> ROOTED IN YOUR LOCATION</p><h1>Good things start<br>with the <em>right crop.</em></h1><p class="intro-copy">Pick a spot. Explore crops that fit its climate and soil.<br>A small starting point for something you can grow.</p></div><div class="garden" aria-hidden="true"><span class="sun"></span><svg viewBox="0 0 300 220"><path d="M20 204 Q150 159 280 204" fill="none" stroke="#344c3a" stroke-width="3"/><path d="M151 189V73M92 194v-60M212 194v-77" stroke="#344c3a" stroke-width="5" fill="none"/><path d="M150 137C92 143 99 92 108 86c37 1 48 26 42 51M154 108c-6-47 30-60 53-54 3 35-21 58-53 54M91 165c-39 3-49-22-44-43 29-2 47 14 44 43M213 159c-1-34 24-48 47-41 1 29-19 46-47 41" fill="#809b72" stroke="#344c3a" stroke-width="3"/></svg><span class="garden-label">a little potential, everywhere</span></div></section>
+    <section class="workspace" aria-label="Crop explorer">
+      <div class="location-panel"><div class="panel-heading"><span class="step">01</span><div><h2>Find your patch</h2><p>Tap the map or enter coordinates.</p></div></div>
+        <div class="map-wrap"><div id="map" aria-label="Location map"></div><span class="map-hint">Click anywhere to drop a pin</span></div>
+        <form id="location-form"><div class="coordinates"><label>Latitude<input id="lat" name="lat" type="number" min="-90" max="90" step="any" required value="27.60"></label><label>Longitude<input id="lon" name="lon" type="number" min="-180" max="180" step="any" required value="84.35"></label></div>
+          <div class="location-tools"><button type="button" id="locate">◎ Use my location</button><button type="button" id="chitwan">Try Chitwan, Nepal ↗</button></div>
+          <button class="primary" id="submit" type="submit"><span>Find my crops</span><span aria-hidden="true">↗</span></button>
+        </form><p id="status" class="status" role="status" aria-live="polite">Ready when you are. Let’s see what could grow here.</p>
+      </div>
+      <div class="results-panel"><div class="panel-heading"><span class="step">02</span><div><h2>Your growing possibilities</h2><p id="result-subtitle">A shortlist, inspired by local conditions.</p></div></div>
+        <div id="empty-state" class="empty-state"><span class="seed-icon" aria-hidden="true">✳</span><h3>A little ground. A lot of possibility.</h3><p>Choose your location and we’ll bring back<br>five crops to get you thinking.</p><span class="empty-note">CLIMATE + SOIL + A LITTLE MACHINE LEARNING</span></div>
+        <div id="results" hidden><div id="conditions" class="conditions"></div><div class="list-heading"><span>CROP</span><span>MODEL SCORE</span></div><ol id="crop-list"></ol><p id="soil-note" class="soil-note" hidden>Soil pH was unavailable for this location, so a default value was used.</p></div>
+        <div class="caution"><span aria-hidden="true">ⓘ</span><p>A starting point, not a planting promise. Annual climate averages can differ from growing-season conditions. Check local advice before planting.</p></div>
+      </div>
+    </section>
+    <section id="how-it-works" class="how"><p class="eyebrow">FROM A PIN TO A POSSIBILITY</p><div><article><span>01 / LOCATE</span><h3>Start with a place.</h3><p>A map pin gives us the coordinates of the patch you’re curious about.</p></article><article><span>02 / UNDERSTAND</span><h3>Meet the conditions.</h3><p>NASA POWER climate data and SoilGrids soil pH help describe the location.</p></article><article><span>03 / EXPLORE</span><h3>Find a starting point.</h3><p>A trained model ranks crops. Its scores are comparisons, not guaranteed yields.</p></article></div></section>
+  </main><footer><a class="brand" href="/">sprout.</a><span>Built with curiosity. Made for growing.</span><span>A Hack Club project 🌱</span></footer>
+</body>
+</html>

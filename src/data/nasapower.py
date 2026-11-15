@@ -15,7 +15,7 @@ def fetch_climate(lat:float,lon:float) -> dict :
     }   
 
     
-    req = requests_cache.CachedSession("data/raw/cache").get(BASE,params=params,timeout=30)
+    req = requests_cache.CachedSession("data/raw/cache").get(BASE,params=params,timeout=(3, 8))
 
     req.raise_for_status()
 
