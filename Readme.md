@@ -118,6 +118,12 @@ Recheck the Keras reference fixtures if intentionally changing the model.
 The export contains dense weights, ReLU/softmax activations, scaler statistics,
 feature order, and crop labels. Dropout is inactive during inference.
 
+## Data sources and credits
+
+- **Training data:** Crop Recommendation Dataset by Atharva Ingle, licensed under Apache 2.0 (Kaggle).
+- **Climate:** NASA POWER.
+- **Soil:** ISRIC SoilGrids.
+
 ## Limitations
 
 This is an exploratory recommendation tool, not a yield forecast or planting
