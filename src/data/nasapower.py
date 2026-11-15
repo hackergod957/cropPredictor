@@ -40,11 +40,13 @@ def fetch_climate(lat:float,lon:float) -> dict :
 
     
 
+    coordinates = data["geometry"]["coordinates"]
+
     return {
         "temperature" : annual_values["T2M"],
         "humidity" : annual_values["RH2M"],
         "rainfall" : annual_values["PRECTOTCORR"] * 30.4,
-        "elevation" : data["geometry"]["coordinates"][2]
+        "elevation" : coordinates[2] if len(coordinates) > 2 else None
     }
 
         
